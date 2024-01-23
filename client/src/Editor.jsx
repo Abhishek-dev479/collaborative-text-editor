@@ -5,9 +5,9 @@ import { io } from 'socket.io-client';
 import {useParams, useLocation} from 'react-router-dom';
 import Dialog from './Dialog';
 import save from './save.png';
-// import Sidebar from './Sidebar';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faBars } from '@fortawesome/free-solid-svg-icons'
+import Sidebar from './Sidebar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 // function Editor(props){
 //     let [socket, setSocket] = useState();
@@ -191,6 +191,7 @@ export default function Editor() {
   let [dialog, setDialog] = useState([false, true]);
   let [url, setUrl] = useState('http://localhost:3000'+useLocation().pathname);
   let [save, setSave] = useState(true);
+  let [sidebar, setSidebar] = useState(true);
 
   useEffect(() => {
     const s = io("http://localhost:3001")
@@ -280,7 +281,7 @@ export default function Editor() {
     div.textContent = 'Share'
     div.setAttribute('id', 'but');
     div.addEventListener('click', () => {
-        console.log('save clicked');
+        console.log('share clicked');
         setDialog([true, true]);
         saveDocument();
     })
@@ -318,13 +319,22 @@ export default function Editor() {
     setDialog([false, true]);
   }
 
+  function closeSidebar(){
+      setSidebar(false);
+  }
+
+  function openSidebar(){
+      setSidebar(true)
+  }
+
   useEffect(() => {
     console.log(save);
   }, [save]);
 
   return (
   <div id="container" ref={wrapperRef}>
-      {dialog[0] && <Dialog share={dialog[1]} url={url} removeDialog={removeDialog}></Dialog>}
+      <div>{dialog[0] && <Dialog share={dialog[1]} url={url} removeDialog={removeDialog}></Dialog>}</div>
+      {/* <div>{sidebar ? <Sidebar closeSidebar={closeSidebar} loggedIn={false}></Sidebar> : <FontAwesomeIcon icon={faBars} onClick={openSidebar}  id='sidebar-toggle' />}</div> */}
   </div>
   )
 }
